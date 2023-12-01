@@ -1,30 +1,14 @@
 import OrderSummary from "../components/OrderSummary";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { addToCart } from "../actions/cartActions";
+import { addToCart, removeFromCart } from "../actions/cartActions";
 import { styled } from "@mui/material/styles";
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Container,
-  Grid,
-  IconButton,
-  Paper,
-  TextField,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Container, Grid, Paper, Typography } from "@mui/material";
 import Loader from "../components/Loader";
-import {
-  Add,
-  AddSharp,
-  Delete,
-  Remove,
-  RemoveSharp,
-} from "@mui/icons-material";
+
 import CartFunc from "../components/CartFunc";
+import EmptyCart from "../components/EmptyCart";
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -34,42 +18,32 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const Cart = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { id } = useParams();
   const searchParams = new URLSearchParams(useLocation().search);
   const qty = parseInt(searchParams.get("qty"));
 
-  const dispatch = useDispatch();
   const cart = useSelector((state) => state.cartR);
   const { cartItems } = cart;
 
-  console.log(cartItems);
+  console.log("cartItems length: " + cartItems.length);
 
   useEffect(() => {
-    console.log("-----");
+    console.log("useEffect triggered from cart");
     if (id && qty) {
       dispatch(addToCart(id, qty));
     }
   }, [dispatch, id, qty]);
 
-  // let itemsTotal = 0;
+  const handleCheckout = () => {
+    navigate("/checkout");
+  };
 
-  // for (let i = 0; i < cartItems?.length; i++) {
-  //   itemsTotal += parseFloat(cartItems[i].price) * cartItems[i].qty;
-  // }
-
-  // // itemsTotal,deliveryFee,vat,totalPayment
-  // cart.itemsTotal = itemsTotal;
-  // cart.deliveryFee = itemsTotal > 1000 ? 0 : 60;
-  // cart.vat = (0.075 * itemsTotal).toFixed(2);
-  // cart.totalPayment = (
-  //   itemsTotal +
-  //   parseFloat(cart.deliveryFee) +
-  //   parseFloat(cart.vat)
-  // ).toFixed(2);
   return (
     <Box sx={{ flexGrow: 1 }} className="m-5">
       <Grid container spacing={2}>
-        <Grid item xs={12} md={9}>
+        <Grid item xs={12} md={8}>
           <Item>
             <Box className="mb-5 ">
               <Typography
@@ -80,8 +54,8 @@ const Cart = () => {
               </Typography>
               <hr className="my-2 " />
 
-              {!cartItems ? (
-                <h1>Empty cart</h1>
+              {cartItems.length == 0 ? (
+                <EmptyCart />
               ) : (
                 <Container>
                   {cartItems.map((cartItem) => (
@@ -96,9 +70,20 @@ const Cart = () => {
             </Box>
           </Item>
         </Grid>
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} md={4}>
           <Item>
             <OrderSummary Children={"Checkout Now"} />
+            <hr />
+            <Container className="flex justify-center my-2 ">
+              <Button
+                variant="outlined"
+                className="w-full "
+                disabled={cartItems.length === 0}
+                onClick={handleCheckout}
+              >
+                Checkout Now
+              </Button>
+            </Container>
           </Item>
         </Grid>
       </Grid>

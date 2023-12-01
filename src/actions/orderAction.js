@@ -9,6 +9,9 @@ import {
   ORDER_PAY_FAIL,
   ORDER_PAY_REQUEST,
   ORDER_PAY_SUCCESS,
+  SSL_PAYMENT_FAIL,
+  SSL_PAYMENT_REQUEST,
+  SSL_PAYMENT_SUCCESS,
 } from "../constrants/orderConstrants";
 import { CART_CLEAR_ITEM } from "../constrants/cartConstrants";
 
@@ -150,6 +153,41 @@ export const payOrder = (id, paymentResult) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: ORDER_PAY_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
+
+export const sslPayment = (paymentData) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: SSL_PAYMENT_REQUEST,
+    });
+
+    const {
+      userLoginR: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.user.token.access}`,
+      },
+    };
+
+    const { data } = await axios.post(
+      "http://127.0.0.1:8000/api/payment/ssl-session/",
+      paymentData,
+      config
+    );
+
+    dispatch({ type: SSL_PAYMENT_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: SSL_PAYMENT_FAIL,
       payload:
         error.response && error.response.data.detail
           ? error.response.data.detail

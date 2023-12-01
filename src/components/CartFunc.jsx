@@ -1,7 +1,6 @@
 import { Add, Delete, Remove } from "@mui/icons-material";
 import { Box, Grid, IconButton, Tooltip, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { addToCart, removeFromCart } from "../actions/cartActions";
 
@@ -11,20 +10,15 @@ const CartFunc = ({ dispatch, cartItem }) => {
   //const [qty, setQty] = useState(cartItem.qty);
 
   const handleDelete = (id) => {
-    console.log("Delete");
+    console.log("Delete id: " + id);
     dispatch(removeFromCart(id));
   };
-  const handleUpdate = (id, val) => {
-    let qty;
-    if (val == "minus") {
-      qty = cartItem.qty;
-      qty--;
-    } else {
-      qty = cartItem.qty;
-      qty++;
-    }
+  const handleUpdate = (id, typ, qty) => {
+    if (typ == "minus") qty--;
+    else qty++;
     dispatch(addToCart(id, qty));
   };
+
   return (
     <Grid container className="flex items-center justify-between mt-2 ">
       <Grid item xs={2}>
@@ -53,7 +47,7 @@ const CartFunc = ({ dispatch, cartItem }) => {
             <span
               onClick={() => {
                 if (cartItem.qty > 1) {
-                  handleUpdate(cartItem.productId, "minus");
+                  handleUpdate(cartItem.productId, "minus", cartItem.qty);
                 }
               }}
             >
@@ -65,7 +59,7 @@ const CartFunc = ({ dispatch, cartItem }) => {
           <IconButton size="small" aria-label="plus">
             <Add
               onClick={() => {
-                handleUpdate(cartItem.productId, "plus");
+                handleUpdate(cartItem.productId, "plus", cartItem.qty);
               }}
             />
           </IconButton>

@@ -6,8 +6,6 @@ const OrderSummary = ({ Children }) => {
   const cart = useSelector((state) => state.cartR);
   const { cartItems } = cart;
 
-  console.log(cartItems);
-
   let itemsTotal = 0;
 
   for (let i = 0; i < cartItems?.length; i++) {
@@ -62,12 +60,6 @@ const OrderSummary = ({ Children }) => {
           <Typography variant="h5">
             ৳ {new Intl.NumberFormat("en-BD").format(cart.totalPayment)}
           </Typography>
-        </Container>
-        <hr />
-        <Container className="flex justify-center my-2 ">
-          <Button variant="outlined" className="w-full ">
-            {Children}
-          </Button>
         </Container>
       </Box>
     </>

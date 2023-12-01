@@ -16,6 +16,10 @@ import PlaceOrderPage from "./pages/PlaceOrderPage";
 import OrderPage from "./pages/OrderPage";
 import SignIn from "./pages/SignIn";
 import OrderDetails from "./pages/OrderDetails";
+import Success from "./pages/payment/Success";
+import Cancel from "./pages/payment/Cancel";
+import Fail from "./pages/payment/Fail";
+import Ipn from "./pages/payment/Ipn";
 // import Error from "./components/Error";
 
 const App = () => {
@@ -38,6 +42,11 @@ const App = () => {
           <Route path="placeorder" element={<PlaceOrderPage />} />
           <Route path="my-order" element={<OrderPage />} />
           <Route path="order-details/:id" element={<OrderDetails />} />
+
+          <Route path="payment/success" element={<Success />} />
+          <Route path="payment/fail" element={<Fail />} />
+          <Route path="payment/cancel" element={<Cancel />} />
+          <Route path="payment/ipn" element={<Ipn />} />
         </Route>
 
         <Route path="*" element={<ErrorPage />} />

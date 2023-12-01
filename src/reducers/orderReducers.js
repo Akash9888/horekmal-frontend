@@ -10,6 +10,10 @@ import {
   ORDER_PAY_REQUEST,
   ORDER_PAY_RESET,
   ORDER_PAY_SUCCESS,
+  SSL_PAYMENT_FAIL,
+  SSL_PAYMENT_REQUEST,
+  SSL_PAYMENT_RESET,
+  SSL_PAYMENT_SUCCESS,
 } from "../constrants/orderConstrants";
 
 export const orderCreateReducer = (state = {}, action) => {
@@ -106,6 +110,31 @@ export const orderPayReducer = (state = {}, action) => {
         error: action.payload,
       };
     case ORDER_PAY_RESET:
+      return {};
+
+    default:
+      return state;
+  }
+};
+
+export const sslPaymentReducer = (state = {}, action) => {
+  switch (action.type) {
+    case SSL_PAYMENT_REQUEST:
+      return {
+        sslLoading: true,
+      };
+    case SSL_PAYMENT_SUCCESS:
+      return {
+        sslLoading: true,
+        sslSuccess: true,
+        sslInfo: action.payload,
+      };
+    case SSL_PAYMENT_FAIL:
+      return {
+        sslLoading: true,
+        sslError: action.payload,
+      };
+    case SSL_PAYMENT_RESET:
       return {};
 
     default:

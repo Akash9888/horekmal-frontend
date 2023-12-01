@@ -103,7 +103,7 @@ export default function OrderDetails() {
                       <Typography variant="subtitle2" className="mt-2 ">
                         Paid At:{" "}
                         <span className="font-bold text-blue-600">
-                          {new Date(order.deliveredDate).toLocaleString()}
+                          {new Date(order.orderDate).toLocaleString()}
                         </span>
                       </Typography>
                     </>

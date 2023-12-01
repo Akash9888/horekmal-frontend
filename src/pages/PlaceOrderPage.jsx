@@ -10,8 +10,6 @@ const PlaceOrderPage = () => {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cartR);
   const { cartItems, shippingAddress, paymentMethod } = cart;
-  console.log(typeof cartItems);
-  console.log(cartItems);
 
   let itemsTotal = 0;
 
